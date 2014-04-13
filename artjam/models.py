@@ -5,9 +5,9 @@ from artjam import db
 
 def make_users_helper(name):
     return db.Table(name,
-        db.Column('jam_id', db.Integer, db.ForeignKey('users.id')),
-        db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
-        )
+                    db.Column('jam_id', db.Integer, db.ForeignKey('users.id')),
+                    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
+                    )
 
 #Utility Tables for Many-to-Many Relationships
 
@@ -15,9 +15,9 @@ def make_users_helper(name):
 nature of this relaitonship.  The user with the friendly_id foreign key
 befriends the user with the invited_id foreign key.'''
 friends = db.Table('Friends',
-        db.Column('friend_id', db.Integer, db.ForeignKey('user.id')),
-        db.Column('invited_id', db.Integer, db.ForeignKey('user.id'))
-        )
+            db.Column('friend_id', db.Integer, db.ForeignKey('user.id')),
+            db.Column('invited_id', db.Integer, db.ForeignKey('user.id'))
+            )
 
 '''Many-to-many utility table to determine which users are participating in
 which jams.'''
@@ -28,26 +28,27 @@ allowed_users = make_users_helper('AllowedUsers')
 
 #ART JAM models
 
+
 class User(db.Model):
     '''Model for our table of user account data.'''
     __tablename__ = 'users'
-    user_id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(24))
     acccount_type = db.Column(db.String(200))
     email = db.Column(db.String(60))
     #TODO: USer login creds should go here?
     friended = db.relationship('User', secondary=friends,
-            backref=db.backref('friend_of', lazy='dynamic'),
-            lazy='dynamic')
+                backref=db.backref('friend_of', lazy='dynamic'),
+                lazy='dynamic')
     jams_created = db.relationship('Jam', backref='creator_id',
-            lazy='dynamic')
+                    lazy='dynamic')
     jams_participating = db.relationship('Jam', secondary=jam_users,
-            backref=db.backref('participants', lazy='dynamic'),
-            lazy='dynamic')
+                        backref=db.backref('participants', lazy='dynamic'),
+                        lazy='dynamic')
     arts_created = db.relationship('Art', backref='creator_id',
-            lazy='dynamic')
+                    lazy='dynamic')
     arts_received = db.relationship('Art', backref='recipient_id',
-            lazy='dynamic')
+                    lazy='dynamic')
 
     def __init__(self, name, acccount_type, email):
         self.user_name = name
@@ -57,6 +58,7 @@ class User(db.Model):
     def __repr__(self):
         return '<User %(name)s, with ID %(id)d>' % \
                 {name: self.user_name, id: self.user_id}
+
 
 class Jam(db.Model):
     '''Model for our table of JAMs '''
@@ -83,6 +85,7 @@ class Jam(db.Model):
     def __repr__(self):
         return '<%JAM (name)s, with ID %(id)d>' % \
                 {name: self.jam_name, id: self.jam_id}
+
 
 class Art(db.Model):
     '''Model for our ART library.'''
