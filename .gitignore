@@ -34,3 +34,9 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Virtual Environment files
+flask-venv
+
+# Temporary notes files
+.tmp
