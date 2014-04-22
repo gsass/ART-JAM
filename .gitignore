@@ -39,4 +39,4 @@ nosetests.xml
 flask-venv
 
 # Temporary notes files
-.tmp
+*.tmp
